@@ -1,0 +1,23 @@
+include: package:flutter_lints/flutter.yaml
+
+linter:
+
+  rules:
+    avoid_print: false
+    avoid_types_as_parameter_names: true
+    cancel_subscriptions: true
+    hash_and_equals: true
+    no_duplicate_case_values: true
+    no_logic_in_create_state: true
+    no_self_assignments: true
+    use_key_in_widget_constructors: true
+    camel_case_extensions: true
+    camel_case_types: true
+    do_not_use_environment: true
+    exhaustive_cases: true
+    prefer_interpolation_to_compose_strings: false
+    prefer_null_aware_method_calls: true
+    prefer_null_aware_operators: true
+    sized_box_for_whitespace: true
+    unnecessary_new: true
+    use_full_hex_values_for_flutter_colors: true

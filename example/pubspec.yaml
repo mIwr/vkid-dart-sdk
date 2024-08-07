@@ -1,0 +1,28 @@
+name: example
+description: "OAuth VK ID example"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  window_manager: 0.3.9 # Windows/Linux/macOS app window size controller
+  webview_flutter: 4.8.0 # Mobile OS webview provider
+  desktop_webview_window: 0.2.3
+
+  vk_id:
+    path: ../
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
