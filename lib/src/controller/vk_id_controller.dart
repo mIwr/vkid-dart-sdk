@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:collection';
 
-import '../network/client_mp.dart';
-
 import '../global_constants.dart';
 import '../network/model/vk_response_result.dart';
-import '../network/api_auth.dart';
-import '../network/api_profile.dart';
+import '../network/client_mp.dart';
+import '../network/client_ext_api_auth.dart';
+import '../network/client_ext_api_profile.dart';
 import '../network/model/vk_err.dart';
 import '../network/model/vk_err_type.dart';
 import '../network/model/vk_response_err.dart';
@@ -20,19 +19,26 @@ import '../model/vk_scope.dart';
 import '../model/vk_oauth.dart';
 import '../model/vk_profile.dart';
 
+///Represents VK ID OAuth controller
+///
+///Allows to authorize and retrieve user info
 class VkIDController {
 
+  ///White-listed redirect_uri variant for all platforms
   static const _kDefaultRedirectSuffix = "vk.com/blank.html";
 
+  ///Multi-platform low-level API client
   static final _client = Client(baseUrl: kBaseUrl);
 
   ///VK client (app) ID
   final int clID;
+  ///Authorization data
   VkOAuth? _oauth;
   ///Authorization data
   VkOAuth? get oauth {
     return _oauth;
   }
+  ///Authorized user info
   VkProfile? _profile;
   ///Authorized user info
   VkProfile? get profile {
@@ -121,7 +127,7 @@ class VkIDController {
     if (redirectUri != null && redirectUri.isNotEmpty) {
       safeRedirectUri = redirectUri;
     }
-    final oauthRes = await ApiAuth.retrieveOAuthToken(client: VkIDController._client, code: authorizationCode, deviceId: deviceId, codeVerifier: codeVerifier, clID: clID, state: state, redirectUri: safeRedirectUri, ip: ip);
+    final oauthRes = await VkIDController._client.retrieveOAuthToken(code: authorizationCode, deviceId: deviceId, codeVerifier: codeVerifier, clID: clID, state: state, redirectUri: safeRedirectUri, ip: ip);
     final auth = oauthRes.result;
     if (auth == null) {
       return oauthRes;
@@ -149,7 +155,7 @@ class VkIDController {
       }
       scopesSet.add(scopeKey);
     }
-    final refreshRes = await ApiAuth.refreshOAuthToken(client: VkIDController._client, refreshToken: auth.refreshToken, deviceId: auth.deviceId, clID: clID, state: auth.state, idToken: auth.idToken, ip: ip, scopes: scopesSet.toList(growable: false));
+    final refreshRes = await VkIDController._client.refreshOAuthToken(refreshToken: auth.refreshToken, deviceId: auth.deviceId, clID: clID, state: auth.state, idToken: auth.idToken, ip: ip, scopes: scopesSet.toList(growable: false));
     final refreshedAuth = refreshRes.result;
     if (refreshedAuth == null) {
       final err = refreshRes.error;
@@ -175,7 +181,7 @@ class VkIDController {
     if (auth == null || auth.accessToken.isEmpty || auth.expired) {
       return VkResponseResult(error: safeAuthRes.error);
     }
-    final revokeRes = await ApiAuth.revokeOAuthTokenPermissions(client: VkIDController._client, clID: clID, accessToken: auth.accessToken);
+    final revokeRes = await VkIDController._client.revokeOAuthTokenPermissions(clID: clID, accessToken: auth.accessToken);
     final status = revokeRes.result;
     if (status != true) {
       final err = revokeRes.error;
@@ -193,7 +199,7 @@ class VkIDController {
     if (auth == null || auth.accessToken.isEmpty || auth.expired) {
       return VkResponseResult(error: safeAuthRes.error);
     }
-    final logoutRes = await ApiAuth.logout(client: VkIDController._client, clID: clID, accessToken: auth.accessToken);
+    final logoutRes = await VkIDController._client.logout(clID: clID, accessToken: auth.accessToken);
     final status = logoutRes.result;
     if (status != true) {
       final err = logoutRes.error;
@@ -225,7 +231,7 @@ class VkIDController {
         return VkResponseResult(error: refreshRes.error);
       }
     }
-    final profileRes = await ApiProfile.getMaskedProfileInfo(client: VkIDController._client, idToken: auth.idToken, clID: clID);
+    final profileRes = await VkIDController._client.getMaskedProfileInfo(idToken: auth.idToken, clID: clID);
     final prf = profileRes.result;
     if (prf == null) {
       final err = profileRes.error;
@@ -246,7 +252,7 @@ class VkIDController {
     if (auth == null || auth.accessToken.isEmpty || auth.expired) {
       return VkResponseResult(error: safeAuthRes.error);
     }
-    final profileRes = await ApiProfile.getProfileInfo(client: VkIDController._client, accessToken: auth.accessToken, clID: clID);
+    final profileRes = await VkIDController._client.getProfileInfo(accessToken: auth.accessToken, clID: clID);
     final prf = profileRes.result;
     if (prf == null) {
       final err = profileRes.error;
@@ -268,6 +274,7 @@ class VkIDController {
     _oauthEventsController.add(null);
   }
 
+  ///Gets if exists or refreshes if needed OAuth session
   Future<VkResponseResult<VkOAuth>> _retrieveActiveOAuth() async {
     var auth = _oauth;
     if (auth == null) {
@@ -282,6 +289,9 @@ class VkIDController {
     return await refreshOAuthToken();
   }
 
+  ///Controller-level error handler
+  ///
+  ///Drops authorization and user info for certain api errors
   void _processVkResponseErr(VkResponseErr err) {
     final errKey = err.vkErr?.error;
     if (errKey == null || errKey.isEmpty || (errKey != VkErrTypeExt.kAccessDeniedKey || errKey != VkErrTypeExt.kInvalidTokenKey || errKey != VkErrTypeExt.kInvalidClientKey)) {

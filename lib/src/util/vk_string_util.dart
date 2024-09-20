@@ -3,8 +3,13 @@ import 'dart:math';
 
 import 'package:vk_id/src/extension/string_ext.dart';
 
+///VK ID string parameter generator utils
 abstract class VkStringUtil {
 
+  ///VK ID string alphabet
+  ///
+  ///Contains digits, uppercased and lowercased letters
+  ///Also contains special characters '-' and '_'
   static const _kAlphabet = [
     "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z",
     "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
@@ -12,7 +17,7 @@ abstract class VkStringUtil {
     '-', '_'
   ];
 
-  ///Checks the string against alphabet [a-zA-Z0-9_-]
+  ///Checks the string against alphabet 'a-zA-Z0-9_-'
   static bool valid(String val) {
     for (var i = 0; i < val.length; i++) {
       if (val[i] != '-' && val[i] != '_' && !val.isDigit(atIndex: i) && !val.isUpperLetter(i) && !val.isLowerLetter(i)) {
@@ -22,7 +27,7 @@ abstract class VkStringUtil {
     return true;
   }
 
-  ///Generates the random string with defined length according alphabet [a-zA-Z0-9_-]
+  ///Generates the random string with defined length according alphabet 'a-zA-Z0-9_-'
   static String generate(int length) {
     final rnd = Random();
     final alphabetLength = _kAlphabet.length;

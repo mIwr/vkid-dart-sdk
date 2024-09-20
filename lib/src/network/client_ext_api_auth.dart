@@ -16,8 +16,10 @@ import '../network/model/vk_api_function.dart';
 import '../util/vk_string_util.dart';
 import '../util/vk_authorize_util.dart';
 
-abstract class ApiAuth {
+///Low level API client extension with authorization functions
+extension ApiAuth on Client {
 
+  ///Tries to generate the authorize uri
   static Uri? generateAuthorizeLink({required int clID, required String redirectUri, required String state, required String codeChallenge, String? codeVerifier, required VkCodeChallengeMethod codeChallengeMethod, List<String> scopes = const [], String? prompt, String? provider, int? langId, String? themeMode}) {
     if (state.length < VkAuthorizeUtil.kMinStateLength || !VkStringUtil.valid(state)) {
       print("Invalid VK state parameter. Parameter must have at least " + VkAuthorizeUtil.kMinStateLength.toString() + " characters and contains only a-z, A-Z, 0-9, '_', '-'");
@@ -65,7 +67,8 @@ abstract class ApiAuth {
     return Uri(scheme: "https", host: "id.vk.com", path: "authorize", queryParameters: queryParams);
   }
 
-  static Future<VkResponseResult<VkOAuth>> retrieveOAuthToken({required Client client, required String code, required String deviceId, required String codeVerifier, required int clID, required String state, required String redirectUri, String? ip}) async {
+  ///Exchanges received from success login challenge for OAuth session
+  Future<VkResponseResult<VkOAuth>> retrieveOAuthToken({required String code, required String deviceId, required String codeVerifier, required int clID, required String state, required String redirectUri, String? ip}) async {
     if (state.length < VkAuthorizeUtil.kMinStateLength || !VkStringUtil.valid(state)) {
       return VkResponseResult(error: VkResponseErr(statusCode: -1, vkErr: VkErr(error: "state", description: "Invalid VK state parameter. Parameter must have at least " + VkAuthorizeUtil.kMinStateLength.toString() + " characters and contains only a-z, A-Z, 0-9, '_', '-'")));
     }
@@ -89,7 +92,7 @@ abstract class ApiAuth {
       bodyParams["ip"] = ip;
     }
     final apiFunc = VkApiFunction(baseUrl: kBaseUrl, path: "oauth2/auth", method: "POST", headers: headers, formData: bodyParams);
-    final response = await client.sendAsync(apiFunc);
+    final response = await sendAsync(apiFunc);
     final err = response.error;
     if (err != null) {
       return VkResponseResult(error: err);
@@ -99,7 +102,8 @@ abstract class ApiAuth {
     return VkResponseResult(result: oauth, error: err);
   }
 
-  static Future<VkResponseResult<VkOAuth>> refreshOAuthToken({required Client client, required String refreshToken, required String deviceId, required int clID, required String state, required String idToken, String? ip, List<String> scopes = const []}) async {
+  ///Refreshes OAuth session
+  Future<VkResponseResult<VkOAuth>> refreshOAuthToken({required String refreshToken, required String deviceId, required int clID, required String state, required String idToken, String? ip, List<String> scopes = const []}) async {
     if (state.length < VkAuthorizeUtil.kMinStateLength || !VkStringUtil.valid(state)) {
       return VkResponseResult(error: VkResponseErr(statusCode: -1, vkErr: VkErr(error: "state", description: "Invalid VK state parameter. Parameter must have at least " + VkAuthorizeUtil.kMinStateLength.toString() + " characters and contains only a-z, A-Z, 0-9, '_', '-'")));
     }
@@ -121,7 +125,7 @@ abstract class ApiAuth {
       bodyParams["scope"] = scopes.join(' ');
     }
     final apiFunc = VkApiFunction(baseUrl: kBaseUrl, path: "oauth2/auth", method: "POST", headers: headers, formData: bodyParams);
-    final response = await client.sendAsync(apiFunc);
+    final response = await sendAsync(apiFunc);
     final err = response.error;
     if (err != null) {
       return VkResponseResult(error: err);
@@ -131,7 +135,8 @@ abstract class ApiAuth {
     return VkResponseResult(result: oauth, error: err);
   }
 
-  static Future<VkResponseResult<bool>> revokeOAuthTokenPermissions({required Client client, required int clID, required String accessToken}) async {
+  ///Revokes the granted permissions from OAuth session
+  Future<VkResponseResult<bool>> revokeOAuthTokenPermissions({required int clID, required String accessToken}) async {
     final Map<String, String> headers = {
       "Content-Type": "application/x-www-form-urlencoded",
       "Accept": "application/json"
@@ -141,7 +146,7 @@ abstract class ApiAuth {
       "client_id": clID.toString()
     };
     final apiFunc = VkApiFunction(baseUrl: kBaseUrl, path: "oauth2/revoke", method: "POST", headers: headers, formData: bodyParams);
-    final response = await client.sendAsync(apiFunc);
+    final response = await sendAsync(apiFunc);
     final err = response.error;
     if (err != null) {
       return VkResponseResult(error: err);
@@ -155,7 +160,8 @@ abstract class ApiAuth {
     return VkResponseResult(result: success, error: err);
   }
 
-  static Future<VkResponseResult<bool>> logout({required Client client, required int clID, required String accessToken}) async {
+  ///Invalidates OAUth session
+  Future<VkResponseResult<bool>> logout({required int clID, required String accessToken}) async {
     final Map<String, String> headers = {
       "Content-Type": "application/x-www-form-urlencoded",
       "Accept": "application/json"
@@ -165,7 +171,7 @@ abstract class ApiAuth {
       "client_id": clID.toString()
     };
     final apiFunc = VkApiFunction(baseUrl: kBaseUrl, path: "oauth2/logout", method: "POST", headers: headers, formData: bodyParams);
-    final response = await client.sendAsync(apiFunc);
+    final response = await sendAsync(apiFunc);
     final err = response.error;
     if (err != null) {
       return VkResponseResult(error: err);

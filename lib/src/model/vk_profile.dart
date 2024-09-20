@@ -1,8 +1,8 @@
 
 import 'dart:convert';
 
-import '../extension/json_codec_ext.dart';
 import 'vk_sex.dart';
+import '../extension/json_codec_ext.dart';
 
 ///VK ID profile info
 class VkProfile {
@@ -60,6 +60,7 @@ class VkProfile {
 
   const VkProfile({required this.userId, required this.firstName, required this.lastName, required this.phone, required this.ava, required this.email, required this.sexApiKey, required this.verified, required this.bDay});
 
+  ///Tries to parse an instance from json map
   static VkProfile? from(Map<String, dynamic> jsonMap) {
     if (!jsonMap.containsKey("user_id")) {
       return null;

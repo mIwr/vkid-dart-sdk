@@ -9,20 +9,28 @@ import 'model/vk_api_function.dart';
 
 ///Represents low-level network API interacting
 class Client {
+
+  ///HTTP client
   final _httpClient = http.Client();
+  ///VK ID API base URL
   var _baseUrl = "";
-  ///Back-end API base URL
+  ///VK ID API base URL
   String get baseUrl => _baseUrl;
 
+  ///Error response events controller
   final StreamController<VkResponseErr> _apiErrorEventsController = StreamController.broadcast();
+  ///Error response events stream
   Stream<VkResponseErr> get onApiError => _apiErrorEventsController.stream;
+  ///Logout error response events controller
   final StreamController<void> _apiLogoutEventsController = StreamController.broadcast();
+  ///Logout error response events stream
   Stream<void> get onApiLogout => _apiLogoutEventsController.stream;
 
   Client({required String baseUrl}) {
     _baseUrl = baseUrl;
   }
 
+  ///Updates VK ID base URL
   bool updateBaseUrl(String urlString) {
     if (urlString.isEmpty) {
       return false;
@@ -59,7 +67,7 @@ class Client {
     }
     var path = apiFunc.path;
     if (path.startsWith('/')) {
-      path = path.substring(0, baseUrl.length - 1);
+      path = path.substring(0, path.length - 1);
     }
     final funcHeaders = apiFunc.headers;
     final formDataMap = apiFunc.formData;
@@ -76,6 +84,7 @@ class Client {
     return req;
   }
 
+  ///Low-level response handler
   Future<VkResponseResult<dynamic>> _processResponse(http.StreamedResponse response, {VkApiFunction? func}) async {
     try {
       final data = await response.stream.bytesToString();
@@ -88,8 +97,6 @@ class Client {
       return _processResponseErr(ex, func: func);
     }
   }
-
-
 
   ///Parses response error
   ///

@@ -1,5 +1,5 @@
 
-///User genders
+///Predefined user gender
 enum VkSex {
   ///Gender not stated
   notStated,
@@ -11,6 +11,7 @@ enum VkSex {
 
 extension VkSexExt on VkSex {
 
+  ///Tries to parse predefined user gender from int API key
   static VkSex? from(int apiKey) {
     switch(apiKey) {
       case 0: return VkSex.notStated;
@@ -20,6 +21,7 @@ extension VkSexExt on VkSex {
     return null;
   }
 
+  ///Returns the int API key from predefined user gender
   int get apiKey {
     switch (this) {
       case VkSex.notStated: return 0;

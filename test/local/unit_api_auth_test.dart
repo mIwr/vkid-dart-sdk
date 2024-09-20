@@ -1,7 +1,7 @@
 import 'package:vk_id/src/model/vk_code_challenge_method.dart';
 import 'package:vk_id/src/model/vk_scope.dart';
 import 'package:vk_id/src/model/vk_theme_mode.dart';
-import 'package:vk_id/src/network/api_auth.dart';
+import 'package:vk_id/src/network/client_ext_api_auth.dart';
 import 'package:test/test.dart';
 import 'package:vk_id/src/util/vk_string_util.dart';
 

@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  window_manager: 0.3.9 # Windows/Linux/macOS app window size controller
+  window_manager: 0.4.2 # Windows/Linux/macOS app window size controller
   webview_flutter: 4.8.0 # Mobile OS webview provider
   desktop_webview_window: 0.2.3
 

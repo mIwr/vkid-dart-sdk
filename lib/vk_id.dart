@@ -1,5 +1,3 @@
-library;
-
 export 'src/controller/vk_id_controller.dart';
 
 export 'src/model/vk_code_challenge_method.dart';

@@ -1,4 +1,5 @@
 
+///Predefined VK ID authorization flow type
 enum VkPrompt {
   ///No user interaction
   ///
@@ -11,8 +12,10 @@ enum VkPrompt {
   consent
 }
 
+///Predefined VK ID authorization flow type extensions
 extension VkPromtExt on VkPrompt {
 
+  ///Tries to parse predefined VK ID authorization flow type from string API key
   static VkPrompt? from(String apiKey) {
     for (final item in VkPrompt.values) {
       if (item.name != apiKey) {
@@ -23,6 +26,7 @@ extension VkPromtExt on VkPrompt {
     return null;
   }
 
+  ///Returns the string API key according predefined VK ID authorization flow type
   String get apiKey {
     return name;
   }

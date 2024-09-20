@@ -1,8 +1,10 @@
 
 import 'dart:convert';
 
+///JSON codec extension utils
 extension JsonCodecExt on JsonCodec {
 
+  ///Parses the certain instance from json map
   static T? parseInstanceFrom<T>(Map<String, dynamic> jsonMap, {required String key, required T? Function(Map<String, dynamic> jsonMap) parser}) {
     if (!jsonMap.containsKey(key) || jsonMap[key] is Map == false) {
       return null;
@@ -13,6 +15,7 @@ extension JsonCodecExt on JsonCodec {
     return parsed;
   }
 
+  ///Parses the certain instances array from json map
   static List<T> parseArrayFrom<T>(Map<String, dynamic> jsonMap, {required String key, required T? Function(Map<String, dynamic> jsonMap) parser}) {
     if (!jsonMap.containsKey(key) || jsonMap[key] is List == false) {
       return [];
@@ -37,6 +40,9 @@ extension JsonCodecExt on JsonCodec {
     return res;
   }
 
+  ///Parses boolean from json map at defined key
+  ///
+  ///Supports parsing from bool 'as is', from int (0 - false, 1 - true), double (0.0 - false, 1.0 - true) and string
   static bool? tryParseBoolFrom(Map<String, dynamic> jsonMap, {required String key}) {
     if (!jsonMap.containsKey(key)) {
       return null;
@@ -75,6 +81,7 @@ extension JsonCodecExt on JsonCodec {
     return null;
   }
 
+  ///Parses double from json map at defined key
   static double? tryParseDoubleFrom(Map<String, dynamic> jsonMap, {required String key}) {
     if (!jsonMap.containsKey(key)) {
       return null;
@@ -106,6 +113,7 @@ extension JsonCodecExt on JsonCodec {
     return null;
   }
 
+  ///Parses int from json map at defined key
   static int? tryParseIntFrom(Map<String, dynamic> jsonMap, {required String key, int? radix}) {
     if (!jsonMap.containsKey(key)) {
       return null;
@@ -122,22 +130,27 @@ extension JsonCodecExt on JsonCodec {
     return null;
   }
 
-  List<T> arrayFrom<T>(Map<String, dynamic> jsonMap, {required String key, required T? Function(Map<String, dynamic> jsonMap) parser}) {
-    return JsonCodecExt.parseArrayFrom(jsonMap, key: key, parser: parser);
-  }
-
+  ///Parses the certain instance from json map
   T? instanceFrom<T>(Map<String, dynamic> jsonMap, {required String key, required T? Function(Map<String, dynamic> jsonMap) parser}) {
     return JsonCodecExt.parseInstanceFrom(jsonMap, key: key, parser: parser);
   }
 
+  ///Parses the certain instances array from json map
+  List<T> arrayFrom<T>(Map<String, dynamic> jsonMap, {required String key, required T? Function(Map<String, dynamic> jsonMap) parser}) {
+    return JsonCodecExt.parseArrayFrom(jsonMap, key: key, parser: parser);
+  }
+
+  ///Parses boolean from json map at defined key
   bool? tryGetBoolFrom(Map<String, dynamic> jsonMap, {required String key}) {
     return JsonCodecExt.tryParseBoolFrom(jsonMap, key: key);
   }
 
+  ///Parses double from json map at defined key
   double? tryGetDoubleFrom(Map<String, dynamic> jsonMap, {required String key}) {
     return JsonCodecExt.tryParseDoubleFrom(jsonMap, key: key);
   }
 
+  ///Parses int from json map at defined key
   int? tryGetIntFrom(Map<String, dynamic> jsonMap, {required String key, int? radix}) {
     return JsonCodecExt.tryParseIntFrom(jsonMap, key: key, radix: radix);
   }

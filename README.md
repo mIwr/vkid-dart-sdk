@@ -125,6 +125,3 @@ On success authorization you will be redirected by uri from redirect_uri + query
 - Back-end mode: Send, if needed, data to back-end for exchanging
 
 **VK ID controller refreshes the access token itself if necessary**
-
-
-

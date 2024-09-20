@@ -1,5 +1,5 @@
 
-///Represents abstract result with positive (data) and negative (error) variants
+///Represents abstract result with positive (data) and (or) negative (error) variants
 class VkResult<T,X extends Error>  {
 
   ///Payload data

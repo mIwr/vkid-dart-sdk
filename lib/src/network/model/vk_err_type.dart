@@ -1,5 +1,4 @@
 
-
 ///Predefined VK error ('error' field) type keys
 enum VkErrType {
   ///No VK ID access - user is banned or deleted
@@ -20,17 +19,27 @@ enum VkErrType {
   invalidRequest,
 }
 
+///Predefined VK error ('error' field) type keys extensions
 extension VkErrTypeExt on VkErrType {
 
+  ///Access denied error key
   static const kAccessDeniedKey = "access_denied";
+  ///Invalid token error key
   static const kInvalidTokenKey = "invalid_token";
+  ///Server error key
   static const kServerErrorKey = "server_error";
+  ///Too many requests error key
   static const kSlowDownKey = "slow_down";
+  ///Service is temporary unavailable error key
   static const kTemporarilyUnavailableKey = "temporarily_unavailable";
+  ///Invalid VK ID client error key
   static const kInvalidClientKey = "invalid_client";
+  ///Invalid ID token error key
   static const kInvalidIdTokenKey = "invalid_id_token";
+  ///Invalid VK ID API request error key
   static const kInvalidRequestKey = "invalid_request";
 
+  ///Tries to parse predefined VK ID error type from string API key
   static VkErrType? from(String apiKey) {
     switch(apiKey) {
       case kAccessDeniedKey: return VkErrType.accessDenied;
@@ -45,6 +54,7 @@ extension VkErrTypeExt on VkErrType {
     return null;
   }
 
+  ///Returns string API key according predefined VK ID error type
   String get apiKey {
     switch(this) {
       case VkErrType.accessDenied: return kAccessDeniedKey;

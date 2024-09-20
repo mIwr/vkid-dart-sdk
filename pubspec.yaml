@@ -1,6 +1,6 @@
 name: vk_id
 description: Dart module with VK ID OAuth API functions. The module allows to log in using VK ID API and receive an access token and user data
-version: 1.0.0
+version: 1.0.1
 homepage: https://github.com/mIwr/vkid-dart-sdk
 repository: https://github.com/mIwr/vkid-dart-sdk
 
@@ -10,7 +10,7 @@ false_secrets:
 topics:
   - network
   - oauth
-  - vk
+  - vk-id
 
 environment:
   sdk: ^3.3.0

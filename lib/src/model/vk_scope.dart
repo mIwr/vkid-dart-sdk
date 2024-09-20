@@ -1,5 +1,5 @@
 
-///VK ID permission scopes
+///Predefined VK ID permission scope
 enum VkScope {
   ///Account personal info (vkid.personal_info). Default scope
   personalInfo,
@@ -35,10 +35,13 @@ enum VkScope {
   notes,
 }
 
+///Predefined VK ID permission scope extensions
 extension VkScopeExt on VkScope {
 
+  ///Account personal info scope API key
   static const kPersonalInfoApiKey = "vkid.personal_info";
 
+  ///Tries to parse predefined VK ID permission scope from string API key
   static VkScope? from(String apiKey) {
     if (apiKey == VkScopeExt.kPersonalInfoApiKey) {
       return VkScope.personalInfo;
@@ -52,6 +55,7 @@ extension VkScopeExt on VkScope {
     return null;
   }
 
+  ///Returns the string API key from predefined VK ID permission scope
   String get apiKey {
     if (this == VkScope.personalInfo) {
       return kPersonalInfoApiKey;

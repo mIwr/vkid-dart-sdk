@@ -7,10 +7,14 @@ import 'package:crypto/crypto.dart';
 import 'vk_string_util.dart';
 import '../model/vk_code_challenge_method.dart';
 
+///VK ID authorize link generator utils
 abstract class VkAuthorizeUtil {
 
+  ///State parameter minimum length
   static const kMinStateLength = 32;
+  ///Code verifier parameter minimum length
   static const kMinCodeVerifierLength = 43;
+  ///Code verifier parameter maximum length
   static const kMaxCodeVerifierLength = 128;
 
   ///Generates random code verifier and its code challenge

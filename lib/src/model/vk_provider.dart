@@ -1,5 +1,5 @@
 
-///Auth provider
+///OAuth provider
 enum VkProvider {
 
   ///VK ID. Default value
@@ -10,12 +10,17 @@ enum VkProvider {
   mailRu
 }
 
+///OAuth provider extensions
 extension VkProviderExt on VkProvider {
 
+  ///VK ID OAuth provider
   static const kVkIDKey = "vkid";
+  ///OK OAuth provider
   static const kOkRuKey = "ok_ru";
+  ///Mail OAuth provider
   static const kMailRuKey = "mail_ru";
 
+  ///Tries to parse predefined OAuth provider from string API key
   static VkProvider? from(String apiKey) {
     switch (apiKey) {
       case kVkIDKey: return VkProvider.vkID;
@@ -25,6 +30,7 @@ extension VkProviderExt on VkProvider {
     return null;
   }
 
+  ///Returns the string API key from predefined OAuth provider
   String get apiKey {
     switch(this) {
       case VkProvider.vkID: return kVkIDKey;

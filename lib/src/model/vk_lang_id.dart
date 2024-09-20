@@ -1,4 +1,5 @@
 
+///Predefined VK ID OAuth API language
 enum VkLangId {
   ///Russian
   rus,
@@ -18,8 +19,10 @@ enum VkLangId {
   turkey
 }
 
+///Predefined VK ID OAuth API language extensions
 extension VkLangIdExt on VkLangId {
 
+  ///Tries to parse predefined VK ID OAuth API language from int API key
   static VkLangId? from(int apiKey) {
     switch(apiKey) {
       case 0: return VkLangId.rus;
@@ -34,6 +37,7 @@ extension VkLangIdExt on VkLangId {
     return null;
   }
 
+  ///Returns int API key according the predefined VK ID OAuth API language
   int get apiKey {
     switch(this) {
       case VkLangId.rus: return 0;
