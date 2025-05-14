@@ -27,8 +27,8 @@ android {
     if (project.android.hasProperty("namespace")) {
         namespace "org.zeit.example"
     }
-    compileSdk 35 //flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    compileSdk 36
+    ndkVersion "26.3.11579264" //flutter.ndkVersion != actual Android NDK version
 
     compileOptions {
         coreLibraryDesugaringEnabled true
@@ -53,7 +53,7 @@ android {
     defaultConfig {
         applicationId "org.zeit.example"
         minSdkVersion 21
-        targetSdkVersion 35 //flutter.targetSdkVersion
+        targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
@@ -74,7 +74,7 @@ android {
     }
 
     dependencies {
-        coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+        coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
     }
 }
 

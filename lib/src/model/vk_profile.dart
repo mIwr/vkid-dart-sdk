@@ -37,6 +37,7 @@ class VkProfile {
   final bool? verified;
   ///User birthday
   final String? bDay;
+  ///User birthday
   DateTime? get bDayDt {
     final birthday = bDay;
     if (birthday == null || birthday.isEmpty) {
@@ -58,9 +59,10 @@ class VkProfile {
     return DateTime(year, month, day);
   }
 
+  ///VK ID profile info ctor
   const VkProfile({required this.userId, required this.firstName, required this.lastName, required this.phone, required this.ava, required this.email, required this.sexApiKey, required this.verified, required this.bDay});
 
-  ///Tries to parse an instance from json map
+  ///Tries to parse an instance from JSON
   static VkProfile? from(Map<String, dynamic> jsonMap) {
     if (!jsonMap.containsKey("user_id")) {
       return null;

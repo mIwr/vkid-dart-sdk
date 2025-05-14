@@ -2,13 +2,13 @@ import 'dart:async';
 import 'dart:collection';
 
 import '../global_constants.dart';
-import '../network/model/vk_response_result.dart';
-import '../network/client_mp.dart';
+import '../model/network/vk_response_result.dart';
+import '../network/client.dart';
 import '../network/client_ext_api_auth.dart';
 import '../network/client_ext_api_profile.dart';
-import '../network/model/vk_err.dart';
-import '../network/model/vk_err_type.dart';
-import '../network/model/vk_response_err.dart';
+import '../model/network/vk_err.dart';
+import '../model/network/vk_err_type.dart';
+import '../model/network/vk_response_err.dart';
 import '../util/vk_authorize_util.dart';
 import '../model/vk_code_challenge_method.dart';
 import '../model/vk_theme_mode.dart';
@@ -55,6 +55,7 @@ class VkIDController {
   ///User info events stream
   Stream<VkProfile?> get onProfileUpdate => _profileEventsController.stream;
 
+  ///VK ID OAuth controller ctor
   VkIDController({required this.clID, VkOAuth? oauth, VkProfile? profile}) {
     _oauth = oauth;
     if (oauth == null || profile == null) {
@@ -115,7 +116,7 @@ class VkIDController {
     final state = VkAuthorizeUtil.generateState();
     var safeRedirectUri = "vk" + clID.toString() + "://" + VkIDController._kDefaultRedirectSuffix;
     if (redirectUri != null && redirectUri.isNotEmpty) {
-      print("Warning: overridden redirect_uri may use only for VK web apps. For Android and iOS set redirectUri as null");
+      print("Warning: overridden redirect_uri may be used only for VK web apps. For Android and iOS set redirectUri as null");
       safeRedirectUri = redirectUri;
     }
     return ApiAuth.generateAuthorizeLink(clID: clID, redirectUri: safeRedirectUri, state: state, codeChallenge: codeChallenge, codeVerifier: codeVerifier, codeChallengeMethod: VkCodeChallengeMethod.sha256, scopes: scopesSet.toList(growable: false), prompt: promptKey, provider: providerKey, langId: langIdKey, themeMode: themeKey);

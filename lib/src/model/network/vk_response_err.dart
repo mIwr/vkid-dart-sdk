@@ -9,5 +9,6 @@ class VkResponseErr extends Error {
   ///VK ID API error
   final VkErr? vkErr;
 
+  ///VK ID response error ctor
   VkResponseErr({required this.statusCode, this.vkErr});
 }

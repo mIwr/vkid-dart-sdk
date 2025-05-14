@@ -1,7 +1,7 @@
 
 import 'dart:convert';
 
-///JSON codec extension utils
+///Dart JSON codec extension utils
 extension JsonCodecExt on JsonCodec {
 
   ///Parses the certain instance from json map

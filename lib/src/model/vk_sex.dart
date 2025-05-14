@@ -9,6 +9,7 @@ enum VkSex {
   male
 }
 
+///Predefined user gender extensions
 extension VkSexExt on VkSex {
 
   ///Tries to parse predefined user gender from int API key

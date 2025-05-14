@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
             }
             _profileNameTextController.text = profile.userId.toString() + " - " + profile.firstName + ' ' + profile.lastName;
           };
-          if (Platform.isIOS || Platform.isAndroid) {
+          if (Platform.isIOS || Platform.isAndroid || Platform.isMacOS) {
             return OAuthScreenMobile(authUri: uri, authCallback: callback);
           }
           return OAuthScreenDesktop(authUri: uri, authCallback: callback);

@@ -10,10 +10,10 @@ export 'src/model/vk_scope.dart';
 export 'src/model/vk_sex.dart';
 export 'src/model/vk_theme_mode.dart';
 
-export 'src/network/model/vk_err.dart';
-export 'src/network/model/vk_err_type.dart';
-export 'src/network/model/vk_response_err.dart';
-export 'src/network/model/vk_response_result.dart';
+export 'src/model/network/vk_err.dart';
+export 'src/model/network/vk_err_type.dart';
+export 'src/model/network/vk_response_err.dart';
+export 'src/model/network/vk_response_result.dart';
 
 export 'src/util/vk_string_util.dart';
 export 'src/util/vk_authorize_util.dart';

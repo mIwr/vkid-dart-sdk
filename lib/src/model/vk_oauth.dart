@@ -55,9 +55,10 @@ class VkOAuth {
     return res;
   }
 
+  ///VK ID OAuth data ctor
   const VkOAuth({required this.userId, required this.accessToken, required this.refreshToken, required this.idToken, required this.tokenType, required this.createTsMsUTC, required this.expiresInS, required this.state, required this.deviceId, required this.scopes});
 
-  ///Tries to parse an instance from json map
+  ///Tries to parse an instance from JSON
   static VkOAuth? from(Map<String, dynamic> jsonMap, {required int createTsMsUTC, required String deviceId, String? idToken}) {
     if (!jsonMap.containsKey("user_id") || !jsonMap.containsKey("access_token") || !jsonMap.containsKey("refresh_token") || !jsonMap.containsKey("token_type") || !jsonMap.containsKey("expires_in")) {
       return null;

@@ -19,7 +19,7 @@ abstract class VkAuthorizeUtil {
 
   ///Generates random code verifier and its code challenge
   static MapEntry<String, String> generateCodeVerifierWithCodeChallenge() {
-    var rnd = Random();
+    final rnd = Random();
     var length = rnd.nextInt(kMaxCodeVerifierLength);
     if (length < kMinCodeVerifierLength) {
       length = kMinCodeVerifierLength;

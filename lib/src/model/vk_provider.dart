@@ -1,7 +1,6 @@
 
 ///OAuth provider
 enum VkProvider {
-
   ///VK ID. Default value
   vkID,
   ///ok.ru

@@ -1,7 +1,7 @@
 
 import 'dart:math';
 
-import 'package:vk_id/src/extension/string_ext.dart';
+import '../extension/string_ext.dart';
 
 ///VK ID string parameter generator utils
 abstract class VkStringUtil {

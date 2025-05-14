@@ -15,6 +15,7 @@ class VkApiFunction {
   ///Request body map
   final Map<String, String>? formData;
 
+  ///VK API function ctor
   const VkApiFunction({this.baseUrl = "", required this.path, required this.method, this.headers, this.queryParams, this.formData});
 
   @override

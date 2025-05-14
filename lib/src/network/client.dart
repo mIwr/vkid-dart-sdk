@@ -2,16 +2,20 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import 'model/vk_err.dart';
-import 'model/vk_response_result.dart';
-import 'model/vk_response_err.dart';
-import 'model/vk_api_function.dart';
+import '../model/network/vk_err.dart';
+import '../model/network/vk_response_result.dart';
+import '../model/network/vk_response_err.dart';
+import '../model/network/vk_api_function.dart';
 
-///Represents low-level network API interacting
+//Multi-platform support
+import '../network/client_ext_web.dart' //Stub (web + io without cert validator)
+  if (dart.library.io) '../network/client_ext_io.dart';//io with cert validator'*/
+
+///Represents low-level network API interacting client with cross-platform (IO + WEB) support
 class Client {
 
   ///HTTP client
-  final _httpClient = http.Client();
+  final http.Client _httpClient;
   ///VK ID API base URL
   var _baseUrl = "";
   ///VK ID API base URL
@@ -26,7 +30,9 @@ class Client {
   ///Logout error response events stream
   Stream<void> get onApiLogout => _apiLogoutEventsController.stream;
 
-  Client({required String baseUrl}) {
+  ///API client ctor
+  Client({required String baseUrl}): _httpClient = ClientExt.stubCtor()
+  {
     _baseUrl = baseUrl;
   }
 
@@ -102,6 +108,10 @@ class Client {
   ///
   /// [ex] Error instance
   VkResponseResult<dynamic> _processResponseErr(Object ex, {VkApiFunction? func}) {
+    final stubResponseRes = stubResponseErrProcess(ex, func: func);
+    if (stubResponseRes != null) {
+      return stubResponseRes;
+    }
     if (ex is TimeoutException) {
       final TimeoutException error = ex;
       var msg = "Timeout exception";

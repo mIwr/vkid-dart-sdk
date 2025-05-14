@@ -1,9 +1,6 @@
-import 'package:vk_id/src/model/vk_code_challenge_method.dart';
-import 'package:vk_id/src/model/vk_scope.dart';
-import 'package:vk_id/src/model/vk_theme_mode.dart';
 import 'package:vk_id/src/network/client_ext_api_auth.dart';
 import 'package:test/test.dart';
-import 'package:vk_id/src/util/vk_string_util.dart';
+import 'package:vk_id/vk_id.dart';
 
 import '../test_constants.dart';
 
@@ -18,5 +15,20 @@ void main() {
       expect(uri != null, true, reason: "Invalid authorize uri generator process");
     });
 
+    test("Handle retrieve OAuth token raw response test", () {
+      final parsedRes = ApiAuth.handleRetrieveOAuthTkResponse(TestConstants.kDummyOAuthTokenResponse, deviceId: "deviceID");
+      final err = parsedRes.error;
+      expect(err, null, reason: "Invalid OAuth token parser");
+      final oauth = parsedRes.result;
+      expect(oauth != null, true, reason: "Invalid OAuth token parser");
+    });
+
+    test("Handle refresh OAuth token raw response test", () {
+      final parsedRes = ApiAuth.handleRefreshOAuthTkResponse(TestConstants.kDummyRefreshOAuthTokenResponse, idToken: "idToken", deviceId: "deviceID");
+      final err = parsedRes.error;
+      expect(err, null, reason: "Invalid OAuth token parser");
+      final oauth = parsedRes.result;
+      expect(oauth != null, true, reason: "Invalid OAuth token parser");
+    });
   });
 }

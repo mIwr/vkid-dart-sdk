@@ -12,5 +12,6 @@ class VkResult<T,X extends Error>  {
   ///Means that instance contains only the payload data without error
   bool get success => error == null && result != null;
 
+  ///Abstract result ctor
   const VkResult({this.result, this.error});
 }

@@ -1,5 +1,5 @@
 
-///String extension utils
+///Dart String extension utils
 extension StringExt on String {
 
   ///Digit chars set

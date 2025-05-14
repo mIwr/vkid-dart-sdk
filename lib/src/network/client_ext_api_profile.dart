@@ -1,8 +1,8 @@
 import '../model/vk_profile.dart';
-import '../network/client_mp.dart';
-import '../network/model/vk_response_result.dart';
+import '../network/client.dart';
+import '../model/network/vk_response_result.dart';
 import '../global_constants.dart';
-import '../network/model/vk_api_function.dart';
+import '../model/network/vk_api_function.dart';
 
 ///Low level API client extension with profile functions
 extension ApiProfile on Client {
@@ -29,6 +29,11 @@ extension ApiProfile on Client {
     };
     final apiFunc = VkApiFunction(baseUrl: kBaseUrl, path: path, method: "POST", headers: headers, formData: bodyParams);
     final response = await sendAsync(apiFunc);
+    return ApiProfile.handleGetProfileInfoResponse(response);
+  }
+
+  ///Parses raw 'get profile info' response
+  static VkResponseResult<VkProfile> handleGetProfileInfoResponse(VkResponseResult<dynamic> response) {
     final err = response.error;
     if (err != null) {
       return VkResponseResult(error: err);
@@ -41,5 +46,4 @@ extension ApiProfile on Client {
     }
     return VkResponseResult(result: profile, error: err);
   }
-
 }

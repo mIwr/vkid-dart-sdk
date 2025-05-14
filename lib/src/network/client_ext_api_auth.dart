@@ -3,16 +3,16 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 
-import '../network/client_mp.dart';
+import '../network/client.dart';
 
 import '../extension/json_codec_ext.dart';
 import '../model/vk_oauth.dart';
-import '../network/model/vk_err.dart';
-import '../network/model/vk_response_err.dart';
-import '../network/model/vk_response_result.dart';
+import '../model/network/vk_err.dart';
+import '../model/network/vk_response_err.dart';
+import '../model/network/vk_response_result.dart';
 import '../model/vk_code_challenge_method.dart';
 import '../global_constants.dart';
-import '../network/model/vk_api_function.dart';
+import '../model/network/vk_api_function.dart';
 import '../util/vk_string_util.dart';
 import '../util/vk_authorize_util.dart';
 
@@ -93,6 +93,11 @@ extension ApiAuth on Client {
     }
     final apiFunc = VkApiFunction(baseUrl: kBaseUrl, path: "oauth2/auth", method: "POST", headers: headers, formData: bodyParams);
     final response = await sendAsync(apiFunc);
+    return ApiAuth.handleRetrieveOAuthTkResponse(response, deviceId: deviceId);
+  }
+
+  ///Parses raw 'retrieve OAuth token' response
+  static VkResponseResult<VkOAuth> handleRetrieveOAuthTkResponse(VkResponseResult<dynamic> response, {required String deviceId}) {
     final err = response.error;
     if (err != null) {
       return VkResponseResult(error: err);
@@ -126,6 +131,11 @@ extension ApiAuth on Client {
     }
     final apiFunc = VkApiFunction(baseUrl: kBaseUrl, path: "oauth2/auth", method: "POST", headers: headers, formData: bodyParams);
     final response = await sendAsync(apiFunc);
+    return ApiAuth.handleRefreshOAuthTkResponse(response, idToken: idToken, deviceId: deviceId);
+  }
+
+  ///Parses raw 'refresh OAuth token' response
+  static VkResponseResult<VkOAuth> handleRefreshOAuthTkResponse(VkResponseResult<dynamic> response, {required String idToken, required String deviceId}) {
     final err = response.error;
     if (err != null) {
       return VkResponseResult(error: err);
@@ -147,17 +157,12 @@ extension ApiAuth on Client {
     };
     final apiFunc = VkApiFunction(baseUrl: kBaseUrl, path: "oauth2/revoke", method: "POST", headers: headers, formData: bodyParams);
     final response = await sendAsync(apiFunc);
-    final err = response.error;
-    if (err != null) {
-      return VkResponseResult(error: err);
-    }
-    final Map<String, dynamic> map = Map.from(response.result);
-    bool? success;
-    if (map.containsKey("response")) {
-      final key = json.tryGetIntFrom(map, key: "response");
-      success = key == 1;
-    }
-    return VkResponseResult(result: success, error: err);
+    return ApiAuth.handleRevokeOAuthTkPermissionsResponse(response);
+  }
+
+  ///Parses raw 'revoke oauth token permissions' response
+  static VkResponseResult<bool> handleRevokeOAuthTkPermissionsResponse(VkResponseResult<dynamic> response) {
+    return handleBoolResponse(response);
   }
 
   ///Invalidates OAUth session
@@ -172,6 +177,16 @@ extension ApiAuth on Client {
     };
     final apiFunc = VkApiFunction(baseUrl: kBaseUrl, path: "oauth2/logout", method: "POST", headers: headers, formData: bodyParams);
     final response = await sendAsync(apiFunc);
+    return ApiAuth.handleLogoutResponse(response);
+  }
+
+  ///Parses raw 'logout' response
+  static VkResponseResult<bool> handleLogoutResponse(VkResponseResult<dynamic> response) {
+    return handleBoolResponse(response);
+  }
+
+  ///Parses raw abstract boolean ({response: 0 or 1}) response
+  static VkResponseResult<bool> handleBoolResponse(VkResponseResult<dynamic> response) {
     final err = response.error;
     if (err != null) {
       return VkResponseResult(error: err);

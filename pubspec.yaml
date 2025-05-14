@@ -20,5 +20,5 @@ dependencies:
   crypto: ^3.0.3
 
 dev_dependencies:
-  lints: ^4.0.0
+  lints: any
   test: ^1.25.7
