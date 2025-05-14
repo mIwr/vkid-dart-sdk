@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.2
+**14.05.25**
+
+- Client cross-platform impl adoption
+- Documenting sources
+
 ## 1.0.1
 **20.09.24**
 
