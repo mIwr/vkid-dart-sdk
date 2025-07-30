@@ -8,7 +8,7 @@ The module allows to generate 'authorize' link, retrieve OAuth token and user da
 
 ## General
 
-- Dart SDK >=3.3.0
+- Dart SDK >=3.0.0
 
 Supports 2 modes:
 
@@ -111,7 +111,7 @@ final codeVerifierWithUri = controller.generateAuthorizeLinkWithCodeVerifier(cod
 
 ### Authorizing on VK ID
 
-**You need flutter context and webview to handle it**
+**You need webview (flutter context) to handle it**
 
 Pass authorize link to webview. Also include NavigationDelegate for preventing redirect navigation requests. See [example](./example/lib/ui/oauth_screen_mobile.dart) for details
 On success authorization you will be redirected by uri from redirect_uri + query parameters

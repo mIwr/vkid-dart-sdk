@@ -2,18 +2,18 @@ name: example
 description: "OAuth VK ID example"
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
-  sdk: ^3.3.0
+  sdk: ^3.0.0
 
 dependencies:
   flutter:
     sdk: flutter
 
-  window_manager: ^0.4.3 # Windows/Linux/macOS app window size controller
-  webview_flutter: ^4.8.0 # Mobile OS webview provider
-  desktop_webview_window: 0.2.3
+  window_manager: ^0.3.8 # Windows/Linux/macOS app window size controller
+  webview_flutter: ^4.4.3 # Mobile OS webview provider
+  desktop_webview_window: ^0.2.3
 
   vk_id:
     path: ../
