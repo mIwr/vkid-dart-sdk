@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 1.0.3
+**30.07.25**
+
+- Expanded Dart SDK version set (min 3.3.0 -> min 3.0.0) according used package versions and sources syntax without dropping major releases
+- Update example app
+
 ## 1.0.2
 **14.05.25**
 
