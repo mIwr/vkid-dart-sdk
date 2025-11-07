@@ -12,5 +12,11 @@ bool get kDartDebugMode => !kDartReleaseMode && !kDartProfileMode;
 // ignore: do_not_use_environment
 const bool kDartIsWeb = bool.fromEnvironment("dart.library.js_util", defaultValue: false);
 
-///VK ID base url
-const kBaseUrl = "https://id.vk.com";
+///Legacy VK base host
+const kLegacyVkBaseHost = "vk.com";
+///Legacy VK ID base host
+const kLegacyVkIdHost = "id." + kLegacyVkBaseHost;
+///VK base host
+const kVkBaseHost = "vk.ru";
+///VK ID base host
+const kVkIdBaseHost = "id." + kVkBaseHost;

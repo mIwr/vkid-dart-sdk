@@ -20,7 +20,7 @@ import '../util/vk_authorize_util.dart';
 extension ApiAuth on Client {
 
   ///Tries to generate the authorize uri
-  static Uri? generateAuthorizeLink({required int clID, required String redirectUri, required String state, required String codeChallenge, String? codeVerifier, required VkCodeChallengeMethod codeChallengeMethod, List<String> scopes = const [], String? prompt, String? provider, int? langId, String? themeMode}) {
+  static Uri? generateAuthorizeLink({String host = kVkIdBaseHost, required int clID, required String redirectUri, required String state, required String codeChallenge, String? codeVerifier, required VkCodeChallengeMethod codeChallengeMethod, List<String> scopes = const [], String? prompt, String? provider, int? langId, String? themeMode}) {
     if (state.length < VkAuthorizeUtil.kMinStateLength || !VkStringUtil.valid(state)) {
       print("Invalid VK state parameter. Parameter must have at least " + VkAuthorizeUtil.kMinStateLength.toString() + " characters and contains only a-z, A-Z, 0-9, '_', '-'");
       return null;
@@ -64,7 +64,7 @@ extension ApiAuth on Client {
     if (themeMode != null) {
       queryParams["scheme"] = themeMode;
     }
-    return Uri(scheme: "https", host: "id.vk.com", path: "authorize", queryParameters: queryParams);
+    return Uri(scheme: "https", host: host, path: "authorize", queryParameters: queryParams);
   }
 
   ///Exchanges received from success login challenge for OAuth session
@@ -91,7 +91,7 @@ extension ApiAuth on Client {
     if (ip != null && ip.isNotEmpty) {
       bodyParams["ip"] = ip;
     }
-    final apiFunc = VkApiFunction(baseUrl: kBaseUrl, path: "oauth2/auth", method: "POST", headers: headers, formData: bodyParams);
+    final apiFunc = VkApiFunction(path: "/oauth2/auth", method: "POST", headers: headers, formData: bodyParams);
     final response = await sendAsync(apiFunc);
     return ApiAuth.handleRetrieveOAuthTkResponse(response, deviceId: deviceId);
   }
@@ -129,7 +129,7 @@ extension ApiAuth on Client {
     if (scopes.isNotEmpty) {
       bodyParams["scope"] = scopes.join(' ');
     }
-    final apiFunc = VkApiFunction(baseUrl: kBaseUrl, path: "oauth2/auth", method: "POST", headers: headers, formData: bodyParams);
+    final apiFunc = VkApiFunction(path: "/oauth2/auth", method: "POST", headers: headers, formData: bodyParams);
     final response = await sendAsync(apiFunc);
     return ApiAuth.handleRefreshOAuthTkResponse(response, idToken: idToken, deviceId: deviceId);
   }
@@ -155,7 +155,7 @@ extension ApiAuth on Client {
       "access_token": accessToken,
       "client_id": clID.toString()
     };
-    final apiFunc = VkApiFunction(baseUrl: kBaseUrl, path: "oauth2/revoke", method: "POST", headers: headers, formData: bodyParams);
+    final apiFunc = VkApiFunction(path: "/oauth2/revoke", method: "POST", headers: headers, formData: bodyParams);
     final response = await sendAsync(apiFunc);
     return ApiAuth.handleRevokeOAuthTkPermissionsResponse(response);
   }
@@ -175,7 +175,7 @@ extension ApiAuth on Client {
       "access_token": accessToken,
       "client_id": clID.toString()
     };
-    final apiFunc = VkApiFunction(baseUrl: kBaseUrl, path: "oauth2/logout", method: "POST", headers: headers, formData: bodyParams);
+    final apiFunc = VkApiFunction(path: "/oauth2/logout", method: "POST", headers: headers, formData: bodyParams);
     final response = await sendAsync(apiFunc);
     return ApiAuth.handleLogoutResponse(response);
   }

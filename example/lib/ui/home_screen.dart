@@ -16,7 +16,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  final _vkidController = VkIDController(clID: 52039838);
+  //Official VK ID web app clID 100 (redirect_uri = https://id.vk.ru)
+  //Official VK ID iOS app clID 523633
+  //Official VK ID android app clID 51925238
+  final _vkidController = VkIDController(clID: 51925238);
   final _redirectUriTextController = TextEditingController();
   Uri? _authorizeUri;
   final _authorizeUriTextController = TextEditingController();

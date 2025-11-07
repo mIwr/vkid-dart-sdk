@@ -32,7 +32,7 @@ abstract class TestConstants {
       "user_id": "12345678",
       "first_name": "firstName",
       "last_name": "L.",
-      "phone": "+79002 *** ** 29",
+      "phone": "+7900 *** ** 29",
       "avatar": "https://pp.userapi.com/60tZWMo4SmwcploUVl9XEt8ufnTTvDUmQ6Bj1g/mmv1pcj63C4.png",
       "email": ""
     }

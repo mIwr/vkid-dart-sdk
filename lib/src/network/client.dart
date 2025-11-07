@@ -16,10 +16,10 @@ class Client {
 
   ///HTTP client
   final http.Client _httpClient;
+  ///VK ID API base host
+  var _baseHost = "";
   ///VK ID API base URL
-  var _baseUrl = "";
-  ///VK ID API base URL
-  String get baseUrl => _baseUrl;
+  String get baseUrl => "https://" + _baseHost;
 
   ///Error response events controller
   final StreamController<VkResponseErr> _apiErrorEventsController = StreamController.broadcast();
@@ -33,15 +33,19 @@ class Client {
   ///API client ctor
   Client({required String baseUrl}): _httpClient = ClientExt.stubCtor()
   {
-    _baseUrl = baseUrl;
+    updateBaseUrl(baseUrl);
   }
 
-  ///Updates VK ID base URL
-  bool updateBaseUrl(String urlString) {
-    if (urlString.isEmpty) {
+  ///Updates VK ID base host
+  bool updateBaseUrl(String host) {
+    var validated = host;
+    if (validated.startsWith("https://")) {
+      validated.replaceFirst("https://", "");
+    }
+    if (validated.isEmpty) {
       return false;
     }
-    _baseUrl = urlString;
+    _baseHost = validated;
 
     return true;
   }
@@ -72,8 +76,8 @@ class Client {
       baseUrl = baseUrl.substring(0, baseUrl.length - 1);
     }
     var path = apiFunc.path;
-    if (path.startsWith('/')) {
-      path = path.substring(0, path.length - 1);
+    if (!path.startsWith('/')) {
+      path = '/' + path;
     }
     final funcHeaders = apiFunc.headers;
     final formDataMap = apiFunc.formData;

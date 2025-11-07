@@ -25,10 +25,10 @@ import '../model/vk_profile.dart';
 class VkIDController {
 
   ///White-listed redirect_uri variant for all platforms
-  static const _kDefaultRedirectSuffix = "vk.com/blank.html";
+  static const _kDefaultRedirectSuffix = kVkBaseHost + "/blank.html";
 
   ///Multi-platform low-level API client
-  static final _client = Client(baseUrl: kBaseUrl);
+  final Client _client;
 
   ///VK client (app) ID
   final int clID;
@@ -56,7 +56,8 @@ class VkIDController {
   Stream<VkProfile?> get onProfileUpdate => _profileEventsController.stream;
 
   ///VK ID OAuth controller ctor
-  VkIDController({required this.clID, VkOAuth? oauth, VkProfile? profile}) {
+  VkIDController({required this.clID, String vkIDHost = kVkIdBaseHost, VkOAuth? oauth, VkProfile? profile}):
+      _client = Client(baseUrl: vkIDHost) {
     _oauth = oauth;
     if (oauth == null || profile == null) {
       if (profile != null) {
@@ -71,10 +72,13 @@ class VkIDController {
     _profile = profile;
   }
 
+  ///Updates low-level API client host
+  bool updateClientBaseHost(String host) => _client.updateBaseUrl(host);
+
   ///Generate authorize link in front-end mode with code verifier
   ///
   ///If code verifier not stated, it will be generated automatically
-  ///If redirectUri not stated (Android and iOS cases), it will be generated automatically as uri 'vk{clientID}://vk.com/blank.html'
+  ///If redirectUri not stated (Android and iOS cases), it will be generated automatically as uri 'vk{clientID}://vk.ru/blank.html'
   ///Returns Map entry, where key is code verifier (provided or generated) and value is generated authorize link (optional)
   MapEntry<String, Uri?> generateAuthorizeLinkWithCodeVerifier({String? codeVerifier, String? redirectUri, List<VkScope> scopes = const [], List<String> customScopeKeys = const[], VkPrompt? prompt, String? customPromptKey, VkProvider? provider, String? customProviderKey, VkLangId? langId, int? customLangId, VkThemeMode? theme, String? customTheme}) {
     final safeCodeVerifier = codeVerifier ?? VkAuthorizeUtil.generateCodeVerifierWithCodeChallenge().key;
@@ -83,7 +87,7 @@ class VkIDController {
 
   ///Generate authorize link with back-end mode with code challenge
   ///
-  ///If redirectUri not stated (Android and iOS cases), it will be generated automatically as uri 'vk{clientID}://vk.com/blank.html'
+  ///If redirectUri not stated (Android and iOS cases), it will be generated automatically as uri 'vk{clientID}://vk.ru/blank.html'
   Uri? generateAuthorizeLinkWithCodeChallenge({required String codeChallenge, String? redirectUri, List<VkScope> scopes = const [], List<String> customScopeKeys = const[], VkPrompt? prompt, String? customPromptKey, VkProvider? provider, String? customProviderKey, VkLangId? langId, int? customLangId, VkThemeMode? theme, String? customTheme}) {
     return _generateAuthorizeLink(codeChallenge: codeChallenge, codeVerifier: null, redirectUri: redirectUri, scopes: scopes, customScopeKeys: customScopeKeys, prompt: prompt, customPromptKey: customPromptKey, provider: provider, customProviderKey: customProviderKey, langId: langId, customLangId: customLangId, theme: theme, customTheme: customTheme);
   }
@@ -128,7 +132,7 @@ class VkIDController {
     if (redirectUri != null && redirectUri.isNotEmpty) {
       safeRedirectUri = redirectUri;
     }
-    final oauthRes = await VkIDController._client.retrieveOAuthToken(code: authorizationCode, deviceId: deviceId, codeVerifier: codeVerifier, clID: clID, state: state, redirectUri: safeRedirectUri, ip: ip);
+    final oauthRes = await _client.retrieveOAuthToken(code: authorizationCode, deviceId: deviceId, codeVerifier: codeVerifier, clID: clID, state: state, redirectUri: safeRedirectUri, ip: ip);
     final auth = oauthRes.result;
     if (auth == null) {
       return oauthRes;
@@ -156,7 +160,7 @@ class VkIDController {
       }
       scopesSet.add(scopeKey);
     }
-    final refreshRes = await VkIDController._client.refreshOAuthToken(refreshToken: auth.refreshToken, deviceId: auth.deviceId, clID: clID, state: auth.state, idToken: auth.idToken, ip: ip, scopes: scopesSet.toList(growable: false));
+    final refreshRes = await _client.refreshOAuthToken(refreshToken: auth.refreshToken, deviceId: auth.deviceId, clID: clID, state: auth.state, idToken: auth.idToken, ip: ip, scopes: scopesSet.toList(growable: false));
     final refreshedAuth = refreshRes.result;
     if (refreshedAuth == null) {
       final err = refreshRes.error;
@@ -182,7 +186,7 @@ class VkIDController {
     if (auth == null || auth.accessToken.isEmpty || auth.expired) {
       return VkResponseResult(error: safeAuthRes.error);
     }
-    final revokeRes = await VkIDController._client.revokeOAuthTokenPermissions(clID: clID, accessToken: auth.accessToken);
+    final revokeRes = await _client.revokeOAuthTokenPermissions(clID: clID, accessToken: auth.accessToken);
     final status = revokeRes.result;
     if (status != true) {
       final err = revokeRes.error;
@@ -200,7 +204,7 @@ class VkIDController {
     if (auth == null || auth.accessToken.isEmpty || auth.expired) {
       return VkResponseResult(error: safeAuthRes.error);
     }
-    final logoutRes = await VkIDController._client.logout(clID: clID, accessToken: auth.accessToken);
+    final logoutRes = await _client.logout(clID: clID, accessToken: auth.accessToken);
     final status = logoutRes.result;
     if (status != true) {
       final err = logoutRes.error;
@@ -232,7 +236,7 @@ class VkIDController {
         return VkResponseResult(error: refreshRes.error);
       }
     }
-    final profileRes = await VkIDController._client.getMaskedProfileInfo(idToken: auth.idToken, clID: clID);
+    final profileRes = await _client.getMaskedProfileInfo(idToken: auth.idToken, clID: clID);
     final prf = profileRes.result;
     if (prf == null) {
       final err = profileRes.error;
@@ -253,7 +257,7 @@ class VkIDController {
     if (auth == null || auth.accessToken.isEmpty || auth.expired) {
       return VkResponseResult(error: safeAuthRes.error);
     }
-    final profileRes = await VkIDController._client.getProfileInfo(accessToken: auth.accessToken, clID: clID);
+    final profileRes = await _client.getProfileInfo(accessToken: auth.accessToken, clID: clID);
     final prf = profileRes.result;
     if (prf == null) {
       final err = profileRes.error;
