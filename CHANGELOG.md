@@ -1,5 +1,12 @@
 # CHANGELOG
 
+## 1.0.4
+**07.11.25**
+
+- Change default host to id.vk.ru. You still may use id.vk.com
+- Support for custom API hosts on VK ID controller
+- Update example app
+
 ## 1.0.3
 **30.07.25**
 

@@ -21,7 +21,7 @@ Supports VK app platforms:
 - iOS
 - Web
 
-**Notice: You aren't strictly bound between the hardware and the VK app platform. For example, you can authorize on iOS VK app using Android device**
+**Notice: You aren't strictly bound between the hardware and the VK app platform. For example, you can authorize on iOS VK app using Android device or desktop PC**
 
 Supports VK ID APIs:
 
@@ -33,7 +33,7 @@ Supports VK ID APIs:
 - Revoke permissions for authorization
 - Invalidate authorization (Logout)
 
-**Notice**: This module doesn't support user authorization. Use webview on flutter context to do it
+**Notice: This module doesn't support user authorization. Use webview on flutter context to do it**
 
 ## Setup
 
@@ -48,7 +48,7 @@ Supports VK ID APIs:
 
 You may generate authorize link itself (redirect_uri and code_challenge or code_verifier) or request the generated link from back-end
 
-- Android, iOS: Redirect uri must be 'vk{clientID}://vk.com/blank.html'. Otherwise VK will throw an error for authorize
+- Android, iOS: Redirect uri must be 'vk{clientID}://vk.ru/blank.html'. Otherwise VK will throw an error for authorize
 - Web: Redirect uri must match with uri from VK web app settings. Also you can use default value from Android and iOS apps (vk{clientID}://vk.com/blank.html)
 
 **Authorize link generation examples**
@@ -116,7 +116,7 @@ final codeVerifierWithUri = controller.generateAuthorizeLinkWithCodeVerifier(cod
 Pass authorize link to webview. Also include NavigationDelegate for preventing redirect navigation requests. See [example](./example/lib/ui/oauth_screen_mobile.dart) for details
 On success authorization you will be redirected by uri from redirect_uri + query parameters
 
-- Front-end mode: Block redirect from id.vk.com on webview context (Prevent navigation request). Also you need extract 'code' and 'device_id' parameters from query for exchanging OAuth token
+- Front-end mode: Block redirect from id.vk.ru on webview context (Prevent navigation request). Also you need extract 'code' and 'device_id' parameters from query for exchanging OAuth token
 - Back-end mode: If VK app is web, don't block redirect. Otherwise block it and process authorization data
 
 ### Retrieve OAuth token
